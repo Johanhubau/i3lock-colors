@@ -2,7 +2,7 @@ import random as rd
 import sys
 from tempfile import mkstemp
 from shutil import move
-from os import fdopen, remove
+from os import fdopen, remove, system
 from shutil import copyfile
 
 USERNAME = 'johan'
@@ -37,5 +37,7 @@ elif sys.argv[1] == "bash":
     color = colors[rd.randint(0,len(colors)-1)]
     #Copy the file as backup
     copyfile('/home/'+USERNAME+'/.config/i3/config', '/home/'+USERNAME+'/.config/i3/config.clbak')
-    #replace i3lock color
-    replace('/home/'+USERNAME+'/.config/i3/config', "hello", "bindsym $mod+l exec i3lock -f -c "+color)
+    #Replace i3lock color
+    replace('/home/'+USERNAME+'/.config/i3/config', "bindsym $mod+l exec i3lock -f -c", "bindsym $mod+l exec i3lock -f -c "+color)
+    #Reload i3config
+    output = system("i3-msg reload")
