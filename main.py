@@ -38,6 +38,6 @@ elif sys.argv[1] == "bash":
     #Copy the file as backup
     copyfile('/home/'+USERNAME+'/.config/i3/config', '/home/'+USERNAME+'/.config/i3/config.clbak')
     #Replace i3lock color
-    replace('/home/'+USERNAME+'/.config/i3/config', "bindsym $mod+l exec i3lock -f -c", "bindsym $mod+l exec i3lock -f -c "+color)
+    replace('/home/'+USERNAME+'/.config/i3/config', "bindsym $mod+l exec i3lock -f -c", "bindsym $mod+l exec i3lock -f -c "+color+"\n")
     #Reload i3config
-    output = system("i3-msg reload")
+    system("i3-msg reload > /dev/null")
