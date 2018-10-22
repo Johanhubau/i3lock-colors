@@ -61,7 +61,7 @@ elif sys.argv[1] == "planned":
             copyfile('/home/'+USERNAME+'/.config/i3/config', '/home/'+USERNAME+'/.config/i3/config.clbak')
             #Create a config line and do not change color
             with open('/home/'+USERNAME+'/.config/i3/config', 'a') as file:
-                file.write("#i3lock-color_config:" + next_date)
+                file.write("#i3lock-color_config:" + next_date + "\n")
         else:
             #Retrieve info
             date = str(dateline[21:])
@@ -75,16 +75,16 @@ elif sys.argv[1] == "planned":
                     next_date = (datetime.datetime.now() + datetime.timedelta(days=1)).date()
                     #Copy the file as backup
                     copyfile('/home/'+USERNAME+'/.config/i3/config', '/home/'+USERNAME+'/.config/i3/config.clbak')
-                    replace('/home/'+USERNAME+'/.config/i3/config', "#i3lock-color_config:", "#i3lock-color_config:" + next_date)
+                    replace('/home/'+USERNAME+'/.config/i3/config', "#i3lock-color_config:", "#i3lock-color_config:" + next_date + "\n")
                 elif sys.argv[2] == "week":
                     next_date = (datetime.datetime.now() + datetime.timedelta(days=7)).date()
                     #Copy the file as backup
                     copyfile('/home/'+USERNAME+'/.config/i3/config', '/home/'+USERNAME+'/.config/i3/config.clbak')
-                    replace('/home/'+USERNAME+'/.config/i3/config', "#i3lock-color_config:", "#i3lock-color_config:" + next_date)
+                    replace('/home/'+USERNAME+'/.config/i3/config', "#i3lock-color_config:", "#i3lock-color_config:" + next_date + "\n")
                 elif sys.argv[2] == "month":
                     next_date = (datetime.datetime.now() + datetime.timedelta(days=30)).date()
                     #Copy the file as backup
                     copyfile('/home/'+USERNAME+'/.config/i3/config', '/home/'+USERNAME+'/.config/i3/config.clbak')
-                    replace('/home/'+USERNAME+'/.config/i3/config', "#i3lock-color_config:", "#i3lock-color_config:" + next_date)
+                    replace('/home/'+USERNAME+'/.config/i3/config', "#i3lock-color_config:", "#i3lock-color_config:" + next_date + "\n")
                 else:
                     print("Error argument 2 is not recognised!")
