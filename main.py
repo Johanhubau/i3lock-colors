@@ -4,6 +4,7 @@ from tempfile import mkstemp
 from shutil import move
 from os import fdopen, remove, system
 from shutil import copyfile
+import datetime
 
 USERNAME = 'johan'
 
@@ -28,11 +29,7 @@ def replace(file_path, pattern, subst):
     #Move new file
     move(abs_path, file_path)
 
-#Start
-
-if len(sys.argv) == 1:
-    print("Error no arguments specified:", "- bash: Change color every time the terminal is open", "- planned: Change color every week", sep='\n')
-elif sys.argv[1] == "bash":
+def change_color():
     #Choose a color
     color = colors[rd.randint(0,len(colors)-1)]
     #Copy the file as backup
@@ -41,3 +38,53 @@ elif sys.argv[1] == "bash":
     replace('/home/'+USERNAME+'/.config/i3/config', "bindsym $mod+l exec i3lock -f -c", "bindsym $mod+l exec i3lock -f -c "+color+"\n")
     #Reload i3config
     system("i3-msg reload > /dev/null")
+
+#Start
+
+if len(sys.argv) == 1:
+    print("Error no arguments specified:", "- bash: Change color every time the terminal is open", "- planned: Change color every week", sep='\n')
+elif sys.argv[1] == "bash":
+    change_color()
+elif sys.argv[1] == "planned":
+    if len(sys.argv) != 3:
+        print("Error!", "missing argument: day,week,month", sep='\n')
+    else:
+        #Retrieve next action date
+        dateline = "null"
+        with open('/home/'+USERNAME+'/.config/i3/config', 'r') as file:
+            for line in file:
+                if "#i3lock-color config" in line:
+                    dateline = line
+        if dateline == "null":
+            next_date = (datetime.datetime.now() + datetime.timedelta(days=1)).date()
+            #Do a backup
+            copyfile('/home/'+USERNAME+'/.config/i3/config', '/home/'+USERNAME+'/.config/i3/config.clbak')
+            #Create a config line and do not change color
+            with open('/home/'+USERNAME+'/.config/i3/config', 'a') as file:
+                file.write("#i3lock-color_config:" + next_date)
+        else:
+            #Retrieve info
+            date = str(dateline[21:])
+            today = str(datetime.date.today())
+            #Do checks
+            if date < today:
+                #Change date on file and color
+                change_color()
+
+                if sys.argv[2] == "day":
+                    next_date = (datetime.datetime.now() + datetime.timedelta(days=1)).date()
+                    #Copy the file as backup
+                    copyfile('/home/'+USERNAME+'/.config/i3/config', '/home/'+USERNAME+'/.config/i3/config.clbak')
+                    replace('/home/'+USERNAME+'/.config/i3/config', "#i3lock-color_config:", "#i3lock-color_config:" + next_date)
+                elif sys.argv[2] == "week":
+                    next_date = (datetime.datetime.now() + datetime.timedelta(days=7)).date()
+                    #Copy the file as backup
+                    copyfile('/home/'+USERNAME+'/.config/i3/config', '/home/'+USERNAME+'/.config/i3/config.clbak')
+                    replace('/home/'+USERNAME+'/.config/i3/config', "#i3lock-color_config:", "#i3lock-color_config:" + next_date)
+                elif sys.argv[2] == "month":
+                    next_date = (datetime.datetime.now() + datetime.timedelta(days=30)).date()
+                    #Copy the file as backup
+                    copyfile('/home/'+USERNAME+'/.config/i3/config', '/home/'+USERNAME+'/.config/i3/config.clbak')
+                    replace('/home/'+USERNAME+'/.config/i3/config', "#i3lock-color_config:", "#i3lock-color_config:" + next_date)
+                else:
+                    print("Error argument 2 is not recognised!")
