@@ -64,7 +64,7 @@ elif sys.argv[1] == "planned":
                 file.write("#i3lock-color_config:" + str(next_date) + "\n")
         else:
             #Retrieve info
-            date = str(dateline[21:])
+            date = str(dateline[21:-2])
             today = str(datetime.date.today())
             #Do checks
             if today >= date:
