@@ -67,7 +67,7 @@ elif sys.argv[1] == "planned":
             date = str(dateline[21:])
             today = str(datetime.date.today())
             #Do checks
-            if date < today:
+            if today >= date:
                 #Change date on file and color
                 change_color()
 
